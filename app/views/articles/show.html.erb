@@ -1,0 +1,8 @@
+<h1>Showing article details</h1>
+  <% unless @article.nil? %>
+    <p><strong>Title: </strong> <%= @article.title %></p>
+    <p><strong>Description: </strong> <%= @article.description %></p>
+  <% else %>
+    <p><strong>Article not Found! </strong></p>
+  <% end %>
+  
