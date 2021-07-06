@@ -2,9 +2,60 @@ class ArticlesController < ApplicationController
   def index
     @articles = Article.all
   end
+  
   def show
     if Article.exists?(params[:id])
       @article = Article.find(params[:id])
     end
+  end
+  
+  def new
+    @article = Article.new
+  end
+  
+  def edit
+    if Article.exists?(params[:id])
+      @article = Article.find(params[:id])
+    else
+      flash[:notice] = "Article not found."
+      @articles = Article.all
+      render 'index'
+    end
+  end
+
+  def create
+    # not needed to be so explicit
+    #@article = Article.new(title: params[:article][:title], description: params[:article][:description])
+    # instead rails can interpret what attributes are needed but needs to know what is allowed to be passed ("white listed")
+    # NEED CODE TO TRAP FOR VALIDATION!
+    @article = Article.new(params.require(:article).permit(:title, :description))
+    if @article.save
+      # flash helper for displaying a message
+      flash[:notice] = "Article was created successfully."
+      #  calls the show action - need to use @article rather than article_path to grab the new id of the object 
+      redirect_to @article
+    else
+      # redraws the new action view
+      render 'new'
+    end
+  end
+
+  def update
+    @article = Article.find(params[:id])
+    if @article.update(params.require(:article).permit(:title, :description))
+      # flash helper for displaying a message
+      flash[:notice] = "Article was updated successfully."
+      #  calls the show action
+      redirect_to article_path
+    else
+      # redraws the edit action view
+      render 'edit'
+    end
+   end
+
+  def destroy
+    @article = Article.find(params[:id])
+    @article.destroy
+    redirect_to articles_path
   end
 end

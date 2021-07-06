@@ -5,4 +5,8 @@
   <% else %>
     <p><strong>Article not Found! </strong></p>
   <% end %>
+
+  <%= link_to 'Edit', edit_article_path(@article)%> |
+  <%= link_to 'Delete', article_path(@article), method: :delete, data: { confirm: "Are you sure?" } %> |
+  <%= link_to 'Return', articles_path %>  
   
