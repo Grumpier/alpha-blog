@@ -1,12 +1,11 @@
 class ArticlesController < ApplicationController
+  before_action :set_article, only: [:show, :edit, :update, :destroy]
+
   def index
     @articles = Article.all
   end
   
   def show
-    if Article.exists?(params[:id])
-      @article = Article.find(params[:id])
-    end
   end
   
   def new
@@ -14,13 +13,6 @@ class ArticlesController < ApplicationController
   end
   
   def edit
-    if Article.exists?(params[:id])
-      @article = Article.find(params[:id])
-    else
-      flash[:notice] = "Article not found."
-      @articles = Article.all
-      render 'index'
-    end
   end
 
   def create
@@ -41,7 +33,6 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    @article = Article.find(params[:id])
     if @article.update(params.require(:article).permit(:title, :description))
       # flash helper for displaying a message
       flash[:notice] = "Article was updated successfully."
@@ -54,8 +45,20 @@ class ArticlesController < ApplicationController
    end
 
   def destroy
-    @article = Article.find(params[:id])
     @article.destroy
     redirect_to articles_path
   end
+
+  private 
+
+  def set_article
+    if Article.exists?(params[:id])
+      @article = Article.find(params[:id])
+    else
+      flash[:notice] = "Article not found."
+      @articles = Article.all
+      render 'index'
+    end
+  end
+
 end
