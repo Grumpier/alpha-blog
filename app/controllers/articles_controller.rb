@@ -20,7 +20,7 @@ class ArticlesController < ApplicationController
     #@article = Article.new(title: params[:article][:title], description: params[:article][:description])
     # instead rails can interpret what attributes are needed but needs to know what is allowed to be passed ("white listed")
     # NEED CODE TO TRAP FOR VALIDATION!
-    @article = Article.new(params.require(:article).permit(:title, :description))
+    @article = Article.new(article_params)
     if @article.save
       # flash helper for displaying a message
       flash[:notice] = "Article was created successfully."
@@ -33,7 +33,7 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    if @article.update(params.require(:article).permit(:title, :description))
+    if @article.update(article_params)
       # flash helper for displaying a message
       flash[:notice] = "Article was updated successfully."
       #  calls the show action
@@ -59,6 +59,10 @@ class ArticlesController < ApplicationController
       @articles = Article.all
       render 'index'
     end
+  end
+
+  def article_params
+    params.require(:article).permit(:title, :description)
   end
 
 end
