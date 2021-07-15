@@ -36,7 +36,7 @@ class UsersController < ApplicationController
             # flash helper for displaying a message
             flash[:notice] = "Update successfull."
             #  calls the show action
-            redirect_to articles_path
+            redirect_to user_path(@user)
         else
             # redraws the edit action view
             render 'edit'
