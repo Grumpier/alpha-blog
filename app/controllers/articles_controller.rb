@@ -21,9 +21,7 @@ class ArticlesController < ApplicationController
     # instead rails can interpret what attributes are needed but needs to know what is allowed to be passed ("white listed")
     # NEED CODE TO TRAP FOR VALIDATION!
     @article = Article.new(article_params)
-    # HARDCODED FOR TESTING
-    @article.user = User.first
-    #
+    @article.user = current_user
 
     if @article.save
       # flash helper for displaying a message
