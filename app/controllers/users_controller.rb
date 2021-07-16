@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+    before_action :set_user, only: [:show, :edit, :update]
+
     def new
         @user = User.new
     end
@@ -9,6 +11,7 @@ class UsersController < ApplicationController
             # flash helper for displaying a message
             welcome = "Welcome, #{@user.username}, to Alpha Blog!" 
             flash[:notice] = welcome
+            session[:user_id] = @user.id
             #  calls the show action - need to use @article rather than article_path to grab the new id of the object 
             redirect_to articles_path
         else
@@ -18,7 +21,6 @@ class UsersController < ApplicationController
     end
 
     def show
-        @user = User.find(params[:id])
         @articles = @user.articles.paginate(page: params[:page], per_page: 5)
     end
 
@@ -27,11 +29,9 @@ class UsersController < ApplicationController
     end
 
     def edit
-        @user = User.find(params[:id])
     end
 
     def update
-        @user = User.find(params[:id])
         if @user.update(user_params)
             # flash helper for displaying a message
             flash[:notice] = "Update successfull."
@@ -47,5 +47,9 @@ class UsersController < ApplicationController
 
     def user_params
         params.require(:user).permit(:username, :email, :password)
+    end
+
+    def set_user
+        @user = User.find(params[:id])
     end
 end
