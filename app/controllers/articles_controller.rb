@@ -71,7 +71,7 @@ class ArticlesController < ApplicationController
 
   # this assumes there is already a logged in user which is forced by prior before_action
   def require_same_user
-    if current_user != @article.user
+    if current_user != @article.user && !current_user.admin?
       flash[:alert] = "You are not authorized for this action."
       redirect_to @article
     end
