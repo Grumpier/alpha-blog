@@ -3,7 +3,8 @@ class User < ApplicationRecord
     before_save { self.email = email.downcase }
 
     # one to many association with article
-    has_many :articles
+    # dependent articles will be destroyed if a user is destoryed
+    has_many :articles, dependent: :destroy
     validates :username, presence: true, 
         uniqueness: { case_sensitive: false }, 
         length: { minimum: 3, maximum: 25 }
